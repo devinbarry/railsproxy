@@ -1,18 +1,31 @@
 require 'http'
 
 module API
-  class AccessTokenController < ApplicationController
-    def index
-      access_token = HTTP.post(
-          'http://54.201.124.60/oauth/token',
-          :json => {
-              :client_id => '9a8ef3e5805c1a42c73dfa5104e27b1c2d942b527a4a815f7f9a7387b064ee67',
-              :client_secret => '4c8fd1543496252d62d7cf51e30d1f940cb86679f88d14878c022d70dbd12bcf',
-              :redirect_uri => 'urn:ietf:wg:oauth:2.0:oob',
-              :grant_type => 'authorization_code',
-              :code => '27df54f7826fb908aa74b9c1309bb34390ffb89484b9136ca2d81e9063232e9f'
-          })
-      render json: access_token, status: 200
+  class AccessTokenController < API::BaseController
+
+    def options
+      # blank section for CORS
+      render :text => ''
+    end
+
+    def create
+      #   change this to a POST action
+      # Fetch params like this from the POST data and use them in the request
+      if params[:code] and params[:client_id] and params[:client_secret]
+        response = HTTP.post(
+            'http://54.201.124.60/oauth/token',
+            :json => {
+                :client_id => params[:client_id],
+                :client_secret => params[:client_secret],
+                :redirect_uri => 'urn:ietf:wg:oauth:2.0:oob',
+                :grant_type => 'authorization_code',
+                :code => params[:code]
+            })
+        access_token = response.to_s
+        render json: access_token, status: 200
+      else
+        render json: 'Please supply a code', status: 400
+      end
     end
   end
 end

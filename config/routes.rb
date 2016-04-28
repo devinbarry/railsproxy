@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   # get 'proxy/index'
 
   namespace :api do
-    resources :access_token, only: [:index, :show]
+    match 'access_token', to: 'access_token#options', via: [:options]
+    resources :access_token, only: [:create]
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

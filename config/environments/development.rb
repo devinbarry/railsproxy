@@ -13,6 +13,9 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
+  # Allow console for these IPs
+  config.web_console.whitelisted_ips = ['10.15.20.120', '10.15.20.10']
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
